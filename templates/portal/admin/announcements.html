@@ -1,0 +1,30 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Announcements{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:admin_dashboard' %}">Dashboard</a> &gt; Announcements</p>
+    <h1 class="portal-page-title">Announcements</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-card">
+    <div class="portal-card-header">
+      <span>Published to dashboards</span>
+      <a href="{% url 'portal:add_announcement' %}" class="btn-portal btn-portal-primary">+ Add Announcement</a>
+    </div>
+    <div class="portal-card-body">
+      {% for a in announcements %}
+        <div style="padding:0.75rem 0; border-bottom:1px solid #e2e8f0;">
+          <strong>{{ a.title }}</strong> — {{ a.date }} ({{ a.get_scope_display }}{% if a.target_class %} — {{ a.target_class.name }}{% endif %})
+          <p style="margin:0.25rem 0 0 0; color:#64748b; font-size:0.9rem;">{{ a.content|truncatewords:20 }}</p>
+        </div>
+      {% empty %}
+        <p>No announcements yet. <a href="{% url 'portal:add_announcement' %}">Add one</a>.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <p><a href="{% url 'portal:admin_dashboard' %}">← Dashboard</a></p>
+{% endblock %}

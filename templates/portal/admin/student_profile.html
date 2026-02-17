@@ -1,0 +1,45 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Student Profile{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:admin_dashboard' %}">Dashboard</a> &gt; <a href="{% url 'portal:student_management' %}">Student Management</a> &gt; Profile</p>
+    <h1 class="portal-page-title">Student Profile</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-card">
+    <div class="portal-card-header">{{ student.user.get_full_name|default:student.user.username }}</div>
+    <div class="portal-card-body">
+      <p><strong>Student ID:</strong> {{ student.student_id|default:"—" }}</p>
+      <p><strong>Class:</strong> {{ student.current_class.name|default:"—" }}</p>
+      <p><strong>Parent Contact:</strong> {{ student.parent_contact|default:"—" }}</p>
+      <p><strong>Email:</strong> {{ student.user.email|default:"—" }}</p>
+      <p><a href="{% url 'portal:student_management' %}">← Back to Student Management</a></p>
+    </div>
+  </div>
+  <div class="portal-card">
+    <div class="portal-card-header">Academic History / Results</div>
+    <div class="portal-card-body portal-table-wrap">
+      <table class="portal-table">
+        <thead>
+          <tr><th>Term</th><th>Subject</th><th>Score</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for r in results %}
+            <tr>
+              <td>{{ r.term.name }}</td>
+              <td>{{ r.subject.name }}</td>
+              <td>{{ r.score }}</td>
+              <td>{{ r.get_status_display }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4">No results yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

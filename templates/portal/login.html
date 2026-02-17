@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Login | Secondary School</title>
+  <link rel="stylesheet" href="{% static 'css/portal.css' %}">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 100%); }
+    .login-box { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.2); width: 100%; max-width: 380px; }
+    .login-box h1 { margin: 0 0 1.5rem 0; font-size: 1.5rem; color: #1e3a5f; }
+    .login-box .form-group { margin-bottom: 1rem; }
+    .login-box label { display: block; margin-bottom: 0.35rem; font-weight: 500; }
+    .login-box input { width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; }
+    .login-box button { width: 100%; padding: 0.75rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; margin-top: 0.5rem; }
+    .login-box button:hover { background: #1d4ed8; }
+    .login-box .error { color: #dc2626; font-size: 0.9rem; margin-top: 0.5rem; }
+    .login-box a { color: #2563eb; text-decoration: none; display: inline-block; margin-top: 1rem; }
+    .login-box a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>Portal Login</h1>
+    <form method="post" action="{% url 'portal:login' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" required placeholder="Username" autofocus>
+      </div>
+      <div class="form-group">
+        <label for="id_password">Password</label>
+        <input type="password" name="password" id="id_password" required placeholder="Password">
+      </div>
+      {% if form.non_field_errors %}
+        <div class="error">{{ form.non_field_errors.0 }}</div>
+      {% endif %}
+      <button type="submit">Sign In</button>
+    </form>
+    <a href="{% url 'public:home' %}">← Back to Website</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb">Dashboard &gt; Teacher Dashboard</p>
+    <h1 class="portal-page-title">Announcements</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-welcome">
+    <div class="portal-welcome-avatar">{{ request.user.first_name|slice:":1"|default:request.user.username|slice:":1"|upper }}</div>
+    <div class="portal-welcome-text">
+      <h2>Good {{ greeting }}, {{ request.user.get_full_name|default:request.user.username }}!</h2>
+      <p>Class • {{ teacher.user.get_full_name|default:"Teacher" }}</p>
+    </div>
+  </div>
+
+  <div class="portal-summary-cards">
+    <a href="{% url 'portal:upload_results' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">📄</div>
+      <div>
+        <div class="portal-summary-card-title">Upload Results</div>
+        <div class="portal-summary-card-meta">Submit for approval</div>
+      </div>
+    </a>
+    <a href="{% url 'portal:upload_results' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">📄</div>
+      <div>
+        <div class="portal-summary-card-title">Results Pending</div>
+        <div class="portal-summary-card-meta">{{ pending_count }} pending approval</div>
+      </div>
+    </a>
+    <a href="{% url 'portal:view_students' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">📄</div>
+      <div>
+        <div class="portal-summary-card-title">View Students</div>
+        <div class="portal-summary-card-meta">Class-based list</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="portal-card">
+    <div class="portal-card-header">Latest Announcements</div>
+    <div class="portal-card-body">
+      {% for a in announcements %}
+        <div style="padding:0.75rem 0; border-bottom:1px solid #e2e8f0;">
+          <strong>{{ a.title }}</strong> — {{ a.date|date:"M d, Y" }}
+          <p style="margin:0.25rem 0 0 0; color:#64748b;">{{ a.content|truncatewords:15 }}</p>
+          <small><a href="{% url 'portal:student_announcements' %}">View</a></small>
+        </div>
+      {% empty %}
+        <p>No announcements.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <p><a href="{% url 'portal:upload_results' %}">Upload Results</a> | <a href="{% url 'portal:view_students' %}">View Students</a></p>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base_public.html' %}
+
+{% block title %}About Us{% endblock %}
+
+{% block hero %}
+  <section class="public-hero">
+    <h1>About Us</h1>
+    <p>Learn about our history, values, and commitment to education.</p>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <div class="public-content">
+    <h2>Our Story</h2>
+    <p>We are a secondary school dedicated to academic excellence and character development. Our community of educators and students works together to create a positive and inclusive learning environment.</p>
+    <h2>Links</h2>
+    <p>
+      <a href="{% url 'public:academics' %}">Academics</a> ·
+      <a href="{% url 'public:admissions' %}">Admissions</a> ·
+      <a href="{% url 'public:contact' %}">Contact</a>
+    </p>
+  </div>
+{% endblock %}

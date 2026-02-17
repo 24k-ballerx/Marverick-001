@@ -1,0 +1,76 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Upload Results{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:teacher_dashboard' %}">Dashboard</a> &gt; Student &gt; Upload Results</p>
+    <h1 class="portal-page-title">Upload Results</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <p>Select class and term to view students and add results. Results are submitted to Admin for approval.</p>
+  <form method="get" class="public-form" style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+    <div class="form-group" style="margin:0;">
+      <label>Class</label>
+      <select name="class" class="form-select" style="width:auto;">
+        <option value="">-- Select --</option>
+        {% for c in classes %}
+          <option value="{{ c.pk }}" {% if selected_class == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group" style="margin:0;">
+      <label>Term</label>
+      <select name="term" class="form-select" style="width:auto;">
+        <option value="">-- Select --</option>
+        {% for t in terms %}
+          <option value="{{ t.pk }}" {% if selected_term == t.pk|stringformat:"s" %}selected{% endif %}>{{ t.session.name }} - {{ t.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group" style="margin:0; align-self:flex-end;">
+      <button type="submit" class="btn-portal btn-portal-primary">Load</button>
+    </div>
+  </form>
+
+  <div class="portal-card">
+    <div class="portal-card-header">
+      <span>Student Results</span>
+      <span># Add New Results</span>
+    </div>
+    <div class="portal-card-body">
+      <div class="portal-table-wrap">
+        <table class="portal-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Parent Contact</th>
+              <th>Subjects</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in students %}
+              <tr>
+                <td>{{ s.user.get_full_name|default:s.user.username }}</td>
+                <td>{{ s.current_class.name|default:"—" }}</td>
+                <td>{{ s.parent_contact|default:"—" }}</td>
+                <td>—</td>
+                <td class="actions">
+                  <a href="#" class="btn-portal btn-portal-secondary">Edit</a>
+                  <a href="#" class="btn-portal btn-portal-danger">Delete</a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="5">Select class and term above to load students. Add/upload results via Django Admin or extend this page with a form.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:teacher_dashboard' %}">← Dashboard</a></p>
+{% endblock %}

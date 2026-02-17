@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Portal{% endblock %} | Secondary School Portal</title>
+  <link rel="stylesheet" href="{% static 'css/portal.css' %}">
+</head>
+<body class="portal">
+  <header class="portal-header">
+    <button class="portal-icon-btn portal-mobile-only" type="button" data-sidebar-toggle aria-label="Toggle menu">☰</button>
+    <a class="portal-header-brand" href="{% url 'portal:dashboard' %}" aria-label="Portal home">
+      <img class="portal-logo" src="{% static 'img/school-logo.svg' %}" alt="School logo">
+      <span class="portal-brand-text">
+        <span class="portal-brand-name">Secondary School</span>
+        <span class="portal-brand-subtitle">Portal</span>
+      </span>
+    </a>
+    <div class="portal-header-search">
+      <input type="search" placeholder="Search..." aria-label="Search">
+    </div>
+    <div class="portal-header-right">
+      <div class="portal-header-actions portal-header-actions-tight">
+        <div class="portal-dropdown" data-dropdown>
+          <button class="portal-icon-btn" type="button" data-dropdown-toggle aria-label="Notifications">🔔</button>
+          <div class="portal-dropdown-menu" data-dropdown-menu>
+            <div class="portal-dropdown-title">Notifications</div>
+            <a href="{% url 'portal:dashboard' %}">No new notifications</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="portal-dropdown portal-user-dropdown" data-dropdown>
+        <button class="portal-user-btn" type="button" data-dropdown-toggle aria-label="User menu">
+          <span class="portal-header-avatar">
+            {% if portal_user.avatar %}<img src="{{ portal_user.avatar.url }}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">{% else %}{{ portal_user.first_name|slice:":1"|default:portal_user.username|slice:":1"|upper }}{% endif %}
+          </span>
+          <span class="portal-user-btn-text">
+            <span class="portal-user-btn-title">Welcome, {{ portal_user.first_name|default:portal_user.username }}</span>
+            <span class="portal-user-btn-subtitle">{{ portal_user.get_role_display }}</span>
+          </span>
+          <span class="caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="portal-dropdown-menu" data-dropdown-menu>
+          <div class="portal-dropdown-title">Account</div>
+          <a href="{% url 'portal:dashboard' %}">My Dashboard</a>
+          {% if portal_user.role == 'admin' %}
+            <a href="{% url 'portal:settings' %}">Settings</a>
+          {% endif %}
+          <div class="portal-dropdown-sep"></div>
+          <a href="{% url 'portal:logout' %}">Log Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <aside class="portal-sidebar">
+    <nav class="portal-sidebar-nav">
+      {% block sidebar %}
+        {% if portal_user.role == 'admin' %}
+          <a href="{% url 'portal:admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">Dashboard</a>
+          <div class="nav-section">Management</div>
+          <a href="{% url 'portal:student_management' %}" class="{% if 'student' in request.resolver_match.url_name %}active{% endif %}">Student Management</a>
+          <a href="{% url 'portal:teacher_management' %}" class="{% if 'teacher' in request.resolver_match.url_name and 'teacher_dashboard' != request.resolver_match.url_name %}active{% endif %}">Teacher Management</a>
+          <a href="{% url 'portal:class_management' %}">Class & Subjects</a>
+          <a href="{% url 'portal:results_management' %}">Results Management</a>
+          <a href="{% url 'portal:announcements_list' %}" class="{% if 'announcement' in request.resolver_match.url_name %}active{% endif %}">Announcements</a>
+          <a href="{% url 'portal:admissions_queue' %}">Admissions Queue</a>
+          <div class="nav-section">System</div>
+          <a href="{% url 'portal:settings' %}">Settings</a>
+        {% elif portal_user.role == 'teacher' %}
+          <a href="{% url 'portal:teacher_dashboard' %}" class="{% if request.resolver_match.url_name == 'teacher_dashboard' %}active{% endif %}">Dashboard</a>
+          <a href="{% url 'portal:upload_results' %}">Upload Results</a>
+          <a href="{% url 'portal:view_students' %}">View Students</a>
+          <a href="{% url 'portal:teacher_dashboard' %}">Announcements</a>
+        {% else %}
+          <a href="{% url 'portal:student_dashboard' %}" class="{% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">Dashboard</a>
+          <a href="{% url 'portal:my_results' %}">My Results</a>
+          <a href="{% url 'portal:student_announcements' %}">Announcements</a>
+        {% endif %}
+      <div style="margin-top:1rem;"></div>
+      <a href="{% url 'public:home' %}">← Back to Website</a>
+      <a href="{% url 'portal:logout' %}">Log Out</a>
+    </nav>
+  </aside>
+
+  <main class="portal-main portal-animate-in">
+    {% if messages %}
+      <div class="portal-alerts">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block breadcrumb %}{% endblock %}
+    {% block content %}{% endblock %}
+  </main>
+  <script src="{% static 'js/ui.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Teacher Profile{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:admin_dashboard' %}">Dashboard</a> &gt; <a href="{% url 'portal:teacher_management' %}">Teacher Management</a> &gt; Profile</p>
+    <h1 class="portal-page-title">Teacher Profile</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-card">
+    <div class="portal-card-header">{{ teacher.user.get_full_name|default:teacher.user.username }}</div>
+    <div class="portal-card-body">
+      <p><strong>Employee ID:</strong> {{ teacher.employee_id|default:"—" }}</p>
+      <p><strong>Subjects:</strong> {% for s in teacher.subjects.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</p>
+      <p><a href="{% url 'portal:teacher_management' %}">← Back to Teacher Management</a></p>
+    </div>
+  </div>
+  <div class="portal-card">
+    <div class="portal-card-header">Assigned Classes</div>
+    <div class="portal-card-body portal-table-wrap">
+      <table class="portal-table">
+        <thead>
+          <tr><th>Class</th><th>Subject</th></tr>
+        </thead>
+        <tbody>
+          {% for a in assigned %}
+            <tr><td>{{ a.class_ref.name }}</td><td>{{ a.subject.name }}</td></tr>
+          {% empty %}
+            <tr><td colspan="2">No assigned classes.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:upload_results' %}">Upload Results</a> (teacher view)</p>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base_portal.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb">Dashboard</p>
+    <h1 class="portal-page-title">Admin Dashboard</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-banner" style="--portal-banner-image: url('{% static 'img/hero-bg.svg' %}');">
+    <h2>Admin Overview</h2>
+    <p>Interactive layout with space for background images, logo, and dropdown menus.</p>
+  </div>
+
+  <div class="portal-summary-cards">
+    <a href="{% url 'portal:student_management' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">👥</div>
+      <div>
+        <div class="portal-summary-card-title">Student Management</div>
+        <div class="portal-summary-card-meta">{{ students_count }} students</div>
+      </div>
+    </a>
+    <a href="{% url 'portal:teacher_management' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">👨‍🏫</div>
+      <div>
+        <div class="portal-summary-card-title">Teacher Management</div>
+        <div class="portal-summary-card-meta">{{ teachers_count }} teachers</div>
+      </div>
+    </a>
+    <a href="{% url 'portal:results_management' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">📋</div>
+      <div>
+        <div class="portal-summary-card-title">Results</div>
+        <div class="portal-summary-card-meta">{{ pending_results }} pending approval</div>
+      </div>
+    </a>
+    <a href="{% url 'portal:admissions_queue' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">📥</div>
+      <div>
+        <div class="portal-summary-card-title">Admissions Queue</div>
+        <div class="portal-summary-card-meta">{{ pending_admissions }} pending</div>
+      </div>
+    </a>
+    <a href="{% url 'portal:announcements_list' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">📢</div>
+      <div>
+        <div class="portal-summary-card-title">Announcements</div>
+        <div class="portal-summary-card-meta">Published to dashboards</div>
+      </div>
+    </a>
+    <a href="{% url 'portal:settings' %}" class="portal-summary-card">
+      <div class="portal-summary-card-icon">⚙️</div>
+      <div>
+        <div class="portal-summary-card-title">Settings</div>
+        <div class="portal-summary-card-meta">Session, grading, roles</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="portal-card">
+    <div class="portal-card-header">Quick Links</div>
+    <div class="portal-card-body">
+      <p><a href="{% url 'portal:student_management' %}">Student Management</a> → Student profiles, academic history, results, attendance</p>
+      <p><a href="{% url 'portal:teacher_management' %}">Teacher Management</a> → Teacher profiles, assigned classes, upload results</p>
+      <p><a href="{% url 'portal:class_management' %}">Class & Subject Management</a> → Student lists, results upload</p>
+      <p><a href="{% url 'portal:results_management' %}">Results Management</a> → Approve results → visible to students</p>
+      <p><a href="{% url 'portal:announcements_list' %}">Announcements</a> → Published to dashboards</p>
+      <p><a href="{% url 'portal:admissions_queue' %}">Admissions Queue</a> → Approve/Reject → convert to student record</p>
+      <p><a href="{% url 'portal:settings' %}">Settings</a> → Academic session, grading system, roles & permissions</p>
+      <p><a href="/admin/portal/contactmessage/">Contact messages</a> (from public website) — {{ unread_contacts }} unread</p>
+    </div>
+  </div>
+{% endblock %}

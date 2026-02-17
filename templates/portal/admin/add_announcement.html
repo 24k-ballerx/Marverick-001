@@ -1,0 +1,46 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Add Announcement{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:admin_dashboard' %}">Dashboard</a> &gt; <a href="{% url 'portal:announcements_list' %}">Announcements</a> &gt; Add New</p>
+    <h1 class="portal-page-title">Add New Announcement</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-card">
+    <div class="portal-card-header"># Add Announcement</div>
+    <div class="portal-card-body">
+      <form method="post" class="public-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Title</label>
+          {{ form.title }}
+          {{ form.title.errors }}
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          {{ form.date }}
+          {{ form.date.errors }}
+        </div>
+        <div class="form-group">
+          <label>Comment / Content</label>
+          {{ form.content }}
+          {{ form.content.errors }}
+        </div>
+        <div class="form-group">
+          <label>Scope</label>
+          {{ form.scope }}
+        </div>
+        <div class="form-group">
+          <label>Target Class (if class-specific)</label>
+          {{ form.target_class }}
+        </div>
+        <button type="submit" class="btn-portal btn-portal-primary">Add new announcement</button>
+      </form>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:announcements_list' %}">← Back to Announcements</a></p>
+{% endblock %}

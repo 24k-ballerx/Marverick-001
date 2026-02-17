@@ -1,0 +1,45 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Student Management{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:admin_dashboard' %}">Dashboard</a> &gt; Student Management</p>
+    <h1 class="portal-page-title">Student Management</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-card">
+    <div class="portal-card-header">Students</div>
+    <div class="portal-card-body portal-table-wrap">
+      <table class="portal-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Student ID</th>
+            <th>Class</th>
+            <th>Parent Contact</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+            <tr>
+              <td>{{ s.user.get_full_name|default:s.user.username }}</td>
+              <td>{{ s.student_id|default:"—" }}</td>
+              <td>{{ s.current_class.name|default:"—" }}</td>
+              <td>{{ s.parent_contact|default:"—" }}</td>
+              <td class="actions">
+                <a href="{% url 'portal:student_profile' s.pk %}" class="btn-portal btn-portal-secondary">Profile</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="5">No students yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:admin_dashboard' %}">← Dashboard</a> | <a href="{% url 'portal:class_management' %}">Class & Subjects</a></p>
+{% endblock %}

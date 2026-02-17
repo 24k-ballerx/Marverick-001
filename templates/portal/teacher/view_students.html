@@ -1,0 +1,54 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}View Students{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:teacher_dashboard' %}">Dashboard</a> &gt; View Students</p>
+    <h1 class="portal-page-title">View Students (Class-based)</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <form method="get" class="public-form" style="display:flex; gap:1rem; align-items:flex-end; margin-bottom:1.5rem;">
+    <div class="form-group" style="margin:0;">
+      <label>Class</label>
+      <select name="class" class="form-select" style="width:auto;">
+        <option value="">-- Select class --</option>
+        {% for c in classes %}
+          <option value="{{ c.pk }}" {% if selected_class and selected_class.pk == c.pk %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn-portal btn-portal-primary">Load</button>
+  </form>
+
+  <div class="portal-card">
+    <div class="portal-card-header">Student List{% if selected_class %} — {{ selected_class.name }}{% endif %}</div>
+    <div class="portal-card-body portal-table-wrap">
+      <table class="portal-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Student ID</th>
+            <th>Class</th>
+            <th>Parent Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+            <tr>
+              <td>{{ s.user.get_full_name|default:s.user.username }}</td>
+              <td>{{ s.student_id|default:"—" }}</td>
+              <td>{{ s.current_class.name|default:"—" }}</td>
+              <td>{{ s.parent_contact|default:"—" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4">Select a class to view students.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:teacher_dashboard' %}">← Dashboard</a> | <a href="{% url 'portal:upload_results' %}">Upload Results</a></p>
+{% endblock %}

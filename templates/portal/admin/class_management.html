@@ -1,0 +1,38 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Class & Subject Management{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:admin_dashboard' %}">Dashboard</a> &gt; Class & Subjects</p>
+    <h1 class="portal-page-title">Class & Subject Management</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-card">
+    <div class="portal-card-header">Classes</div>
+    <div class="portal-card-body">
+      <ul>
+        {% for c in classes %}
+          <li><strong>{{ c.name }}</strong> — {{ c.description|default:"—" }} <a href="{% url 'portal:student_management' %}">Student list</a> | <a href="{% url 'portal:upload_results' %}">Results upload</a></li>
+        {% empty %}
+          <li>No classes. Add via Django Admin.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="portal-card">
+    <div class="portal-card-header">Subjects</div>
+    <div class="portal-card-body">
+      <ul>
+        {% for s in subjects %}
+          <li>{{ s.name }}{% if s.code %} ({{ s.code }}){% endif %}</li>
+        {% empty %}
+          <li>No subjects. Add via Django Admin.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:admin_dashboard' %}">← Dashboard</a> | <a href="{% url 'portal:student_management' %}">Student Lists</a> | <a href="{% url 'portal:results_management' %}">Results</a></p>
+{% endblock %}

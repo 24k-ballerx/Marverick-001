@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Home{% endblock %} | Secondary School</title>
+  <link rel="stylesheet" href="{% static 'css/public.css' %}">
+</head>
+<body class="public">
+  <header class="public-header">
+    <a href="{% url 'public:home' %}" class="public-header-brand" aria-label="School home">
+      <img class="public-logo" src="{% static 'img/school-logo.svg' %}" alt="School logo">
+      <span class="public-brand-text">
+        <span class="public-brand-name">Secondary School</span>
+        <span class="public-brand-subtitle">Portal & Website</span>
+      </span>
+    </a>
+    <nav class="public-nav" aria-label="Main navigation">
+      <a href="{% url 'public:about' %}">About Us</a>
+
+      <div class="public-nav-dropdown" data-dropdown>
+        <a href="{% url 'public:academics' %}" class="public-nav-dropdown-toggle" data-dropdown-toggle>
+          Academics
+          <span class="caret" aria-hidden="true">▾</span>
+        </a>
+        <div class="public-nav-dropdown-menu" data-dropdown-menu>
+          <a href="{% url 'public:academics' %}">Programs</a>
+          <a href="{% url 'public:academics' %}#subjects">Subjects</a>
+          <a href="{% url 'public:academics' %}#calendar">Academic Calendar</a>
+        </div>
+      </div>
+
+      <div class="public-nav-dropdown" data-dropdown>
+        <a href="{% url 'public:admissions' %}" class="public-nav-dropdown-toggle" data-dropdown-toggle>
+          Admissions
+          <span class="caret" aria-hidden="true">▾</span>
+        </a>
+        <div class="public-nav-dropdown-menu" data-dropdown-menu>
+          <a href="{% url 'public:admissions' %}">Admissions Overview</a>
+          <a href="{% url 'public:online_application' %}">Online Application</a>
+          <a href="{% url 'public:contact' %}">Contact Admissions</a>
+        </div>
+      </div>
+
+      <a href="{% url 'public:news_list' %}">News & Events</a>
+      <a href="{% url 'public:contact' %}">Contact</a>
+      <a href="{% url 'public:portal_login' %}" class="public-nav-cta">Portal Login</a>
+    </nav>
+  </header>
+
+  {% block hero %}{% endblock %}
+
+  <div class="public-container public-animate-in">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="portal-alerts"><div class="alert alert-{{ message.tags }}">{{ message }}</div></div>
+      {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+  </div>
+
+  <footer class="public-footer">
+    <p>&copy; {% now "Y" %} Secondary School. <a href="{% url 'public:contact' %}">Contact</a> | <a href="{% url 'public:portal_login' %}">Portal Login</a></p>
+  </footer>
+  <script src="{% static 'js/ui.js' %}"></script>
+</body>
+</html>

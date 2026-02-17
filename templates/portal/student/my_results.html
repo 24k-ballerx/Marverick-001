@@ -1,0 +1,53 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}My Results{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:student_dashboard' %}">Dashboard</a> &gt; My Results</p>
+    <h1 class="portal-page-title">My Results</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <form method="get" class="public-form" style="display:flex; gap:1rem; align-items:flex-end; margin-bottom:1.5rem;">
+    <div class="form-group" style="margin:0;">
+      <label>Filter by Term</label>
+      <select name="term" class="form-select" style="width:auto;">
+        <option value="">All terms</option>
+        {% for t in terms %}
+          <option value="{{ t.pk }}" {% if selected_term == t.pk|stringformat:"s" %}selected{% endif %}>{{ t.session.name }} - {{ t.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn-portal btn-portal-primary">Filter</button>
+    <button type="button" class="btn-portal btn-portal-secondary" onclick="window.print()">Print</button>
+  </form>
+
+  <div class="portal-card">
+    <div class="portal-card-header">Results (approved only)</div>
+    <div class="portal-card-body portal-table-wrap">
+      <table class="portal-table">
+        <thead>
+          <tr>
+            <th>Term</th>
+            <th>Subject</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in results %}
+            <tr>
+              <td>{{ r.term.name }}</td>
+              <td>{{ r.subject.name }}</td>
+              <td>{{ r.score }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3">No results yet, or none approved for selected term.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:student_dashboard' %}">← Dashboard</a></p>
+{% endblock %}

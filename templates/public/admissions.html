@@ -1,0 +1,24 @@
+{% extends 'base_public.html' %}
+
+{% block title %}Admissions{% endblock %}
+
+{% block hero %}
+  <section class="public-hero">
+    <h1>Admissions</h1>
+    <p>Start your journey with us. Apply online or get in touch for more information.</p>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <div class="public-content">
+    <h2>How to Apply</h2>
+    <p>We welcome applications from prospective students. Use our online application to submit your details; our team will review and contact you.</p>
+    <p>
+      <a href="{% url 'public:online_application' %}" class="btn-public btn-public-primary">Online Application</a>
+    </p>
+    <h2>Links</h2>
+    <p>
+      <a href="{% url 'public:contact' %}">Contact</a> for any questions about admissions.
+    </p>
+  </div>
+{% endblock %}

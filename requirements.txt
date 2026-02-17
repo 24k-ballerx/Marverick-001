@@ -1,0 +1,16 @@
+Django>=4.2,<5
+mysqlclient>=2.2.0
+django-crispy-forms>=2.1
+crispy-bootstrap5>=2024.2
+Pillow>=10.0.0
+
+
+
+
+
+#    cd "c:\Users\USER\Marverick 001"
+#    set USE_SQLITE=true
+#    pip install -r requirements.txt
+#    python manage.py migrate
+#    python manage.py createsuperuser
+#    python manage.py runserver

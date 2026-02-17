@@ -1,0 +1,48 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Admissions Queue{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:admin_dashboard' %}">Dashboard</a> &gt; Admissions Queue</p>
+    <h1 class="portal-page-title">Admissions Queue</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-card">
+    <div class="portal-card-header">Pending applications (Approve/Reject → convert to student record)</div>
+    <div class="portal-card-body portal-table-wrap">
+      <table class="portal-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Applying Class</th>
+            <th>Submitted</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for app in applications %}
+            <tr>
+              <td>{{ app.first_name }} {{ app.last_name }}</td>
+              <td>{{ app.email }}</td>
+              <td>{{ app.phone }}</td>
+              <td>{{ app.applying_class.name|default:"—" }}</td>
+              <td>{{ app.submitted_at|date:"M d, Y" }}</td>
+              <td class="actions">
+                <a href="{% url 'portal:approve_admission' app.pk %}" class="btn-portal btn-portal-primary">Approve</a>
+                <a href="{% url 'portal:reject_admission' app.pk %}" class="btn-portal btn-portal-danger">Reject</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6">No pending applications.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:admin_dashboard' %}">← Dashboard</a></p>
+{% endblock %}

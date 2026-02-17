@@ -1,0 +1,32 @@
+{% extends 'base_portal.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block breadcrumb %}
+  <div class="portal-page-header">
+    <p class="portal-breadcrumb"><a href="{% url 'portal:admin_dashboard' %}">Dashboard</a> &gt; Settings</p>
+    <h1 class="portal-page-title">Settings</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="portal-card">
+    <div class="portal-card-header">Academic Session</div>
+    <div class="portal-card-body">
+      <ul>
+        {% for s in sessions %}
+          <li>{{ s.name }} ({{ s.start_date }} – {{ s.end_date }}) {% if s.is_current %}<strong>Current</strong>{% endif %}</li>
+        {% empty %}
+          <li>No sessions. Manage in <a href="/admin/">Django Admin</a>.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="portal-card">
+    <div class="portal-card-header">Grading System & Roles</div>
+    <div class="portal-card-body">
+      <p>Grading system and roles & permissions can be configured in <a href="/admin/">Django Admin</a>.</p>
+    </div>
+  </div>
+  <p><a href="{% url 'portal:admin_dashboard' %}">← Dashboard</a></p>
+{% endblock %}
