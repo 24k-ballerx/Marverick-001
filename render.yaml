@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: marverick-001-web
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt -r extra-requirements.txt && python manage.py collectstatic --noinput
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        sync: false
+      - key: DJANGO_DEBUG
+        value: 'False'
+      - key: USE_SQLITE
+        value: 'true'

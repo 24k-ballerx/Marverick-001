@@ -29,6 +29,7 @@ except ImportError:
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -57,29 +58,42 @@ TEMPLATES = [
     },
 ]
 
-_use_sqlite = os.environ.get('USE_SQLITE', '').lower() == 'true'
-if _use_sqlite:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+_database_url = os.environ.get('DATABASE_URL')
+if _database_url:
+    try:
+        import dj_database_url
+
+        DATABASES = {
+            'default': dj_database_url.parse(_database_url, conn_max_age=600)
         }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get('DB_NAME', 'school_portal'),
-            'USER': os.environ.get('DB_USER', 'root'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-            'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-            'PORT': os.environ.get('DB_PORT', '3306'),
-            'OPTIONS': {
-                'charset': 'utf8mb4',
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            },
+    except ImportError:
+        # fall back to existing behavior if dj_database_url not installed
+        _database_url = None
+
+if not _database_url:
+    _use_sqlite = os.environ.get('USE_SQLITE', 'true').lower() == 'true'
+    if _use_sqlite:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
         }
-    }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': os.environ.get('DB_NAME', 'school_portal'),
+                'USER': os.environ.get('DB_USER', 'root'),
+                'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+                'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+                'PORT': os.environ.get('DB_PORT', '3306'),
+                'OPTIONS': {
+                    'charset': 'utf8mb4',
+                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                },
+            }
+        }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -96,6 +110,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Use WhiteNoise storage when not in DEBUG to serve static files on Render
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
