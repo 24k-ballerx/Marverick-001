@@ -11,8 +11,8 @@ from .models import (
 class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'is_staff')
     list_filter = ('role', 'is_staff')
-    fieldsets = BaseUserAdmin.fieldsets + (('Portal', {'fields': ('role', 'phone', 'avatar')}),)
-    add_fieldsets = BaseUserAdmin.add_fieldsets + (('Portal', {'fields': ('role', 'phone')}),)
+    fieldsets = BaseUserAdmin.fieldsets + [('Portal', {'fields': ('role', 'phone', 'avatar')})]
+    add_fieldsets = BaseUserAdmin.add_fieldsets + [('Portal', {'fields': ('role', 'phone')})]
 
 
 @admin.register(AcademicSession)
