@@ -13,3 +13,17 @@ services:
         value: 'False'
       - key: USE_SQLITE
         value: 'true'
+  - type: postgres
+    name: marverick-001-db
+    plan: starter
+    region: oregon
+    envVars:
+      - key: POSTGRES_PASSWORD
+        sync: false
+      - key: POSTGRES_USER
+        sync: false
+      - key: POSTGRES_DB
+        sync: false
+
+# Note: After creating the Postgres service on Render, copy the DATABASE_URL
+# from the Postgres service dashboard into the web service env var `DATABASE_URL`.
